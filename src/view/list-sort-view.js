@@ -29,7 +29,7 @@ const createNewListSortTemplate = ()=>(
 </form>`
 );
 
-class NewListSort {
+class ListSort {
   getTemplate() {
     return createNewListSortTemplate();
   }
@@ -47,4 +47,4 @@ class NewListSort {
   }
 }
 
-export{NewListSort};
+export{ListSort};

@@ -166,7 +166,7 @@ const createAddPointTemplate = ()=>(
 );
 
 
-class NewAddPoint {
+class AddNewPoint {
   getTemplate() {
     return createAddPointTemplate();
   }
@@ -184,4 +184,4 @@ class NewAddPoint {
   }
 }
 
-export{NewAddPoint};
+export{AddNewPoint};

@@ -21,7 +21,7 @@ const createNewListFilterTemplate = ()=>(
     </form>`
 );
 
-class NewListFilter {
+class ListFilter {
   getTemplate() {
     return createNewListFilterTemplate();
   }
@@ -39,4 +39,4 @@ class NewListFilter {
   }
 }
 
-export{NewListFilter};
+export{ListFilter};

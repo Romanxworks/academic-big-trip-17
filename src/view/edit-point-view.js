@@ -159,7 +159,7 @@ const createNewEditPointTemplate = ()=>(
 );
 
 
-class NewEditPoint {
+class EditPoint {
   getTemplate() {
     return createNewEditPointTemplate();
   }
@@ -177,4 +177,4 @@ class NewEditPoint {
   }
 }
 
-export{NewEditPoint};
+export{EditPoint};

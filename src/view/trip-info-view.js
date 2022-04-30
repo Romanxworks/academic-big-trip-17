@@ -15,7 +15,7 @@ const createNewTripInfoTemplate = ()=>(
 );
 
 
-class NewTripInfo {
+class TripInfo {
   getTemplate() {
     return createNewTripInfoTemplate();
   }
@@ -33,4 +33,4 @@ class NewTripInfo {
   }
 }
 
-export{NewTripInfo};
+export{TripInfo};

@@ -39,7 +39,7 @@ const createNewItemListTemplate = ()=>(
 );
 
 
-class NewItemList {
+class ItemList {
   getTemplate() {
     return createNewItemListTemplate();
   }
@@ -57,4 +57,4 @@ class NewItemList {
   }
 }
 
-export{NewItemList};
+export{ItemList};
