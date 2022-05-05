@@ -1,22 +1,25 @@
 import{List} from '../view/list-view.js';
 import{ItemList} from '../view/item-list-view.js';
-import{AddNewPoint} from '../view/add-new-point-view.js';
-import{EditPoint} from '../view/edit-point-view.js';
+import{AddEditPoint} from '../view/add-edit-point-view.js';
 import {render} from '../render.js';
+import {getRandomInteger} from '../utils.js';
 
-const COUNT_LI= 3;
+const count = getRandomInteger(2, 5);
 class ListPresenter {
   listComponent = new List();
 
-  init = (listContainer) => {
+  init = (listContainer, pointModel) => {
     this.listContainer = listContainer;
+    this.pointModel = pointModel;
+    this.pointsList = [...this.pointModel.getPoint()];
+    this.offers = [...this.pointModel.getOffer()];
+    this.destination = [...this.pointModel.getDestination()];
 
     render(this.listComponent, this.listContainer);
-    render(new EditPoint(), this.listComponent.getElement());
-    render(new AddNewPoint(), this.listComponent.getElement());
+    render(new AddEditPoint(this.offers[count], this.destination[count]), this.listComponent.getElement());
 
-    for (let i = 0; i < COUNT_LI; i++) {
-      render(new ItemList(), this.listComponent.getElement());
+    for (let i = 0; i < this.pointsList.length; i++) {
+      render(new ItemList(this.pointsList[i]), this.listComponent.getElement());
     }
   };
 }

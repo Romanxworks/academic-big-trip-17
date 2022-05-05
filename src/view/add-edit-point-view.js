@@ -1,7 +1,28 @@
 import {createElement} from '../render.js';
+import {CITIES} from '../mock/const.js';
 
-const createAddPointTemplate = ()=>(
-  `<li class="trip-events__item">
+const offerElementTemplate = (offer) =>(
+  `<div class="event__offer-selector">
+       <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
+        <label class="event__offer-label" for="event-offer-luggage-1">
+        <span class="event__offer-title">${offer.title}</span>
+         &plus;&euro;&nbsp;
+        <span class="event__offer-price">${offer.price}</span>
+        </label>
+    </div>`
+);
+const offerTemplate = (offers)=>offers.map((offer)=>offerElementTemplate(offer)).join('');
+
+const destinationNameTemplate = (name)=>`<option value="${name}"></option>`;
+const destinationName = ()=>CITIES.map((name)=>destinationNameTemplate(name)).join('');
+
+const pictureTemplate = (src)=>`<img class="event__photo" src="${src}" alt="Event photo">`;
+const picturesTemplate = (pictures)=>pictures.map((picture)=>pictureTemplate(picture.src)).join('');
+
+const createAddEditPointTemplate = (offer, destination)=>{
+  const {offers} = offer;
+  const {description, pictures} = destination;
+  return (`<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
@@ -69,9 +90,7 @@ const createAddPointTemplate = ()=>(
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Geneva" list="destination-list-1">
                     <datalist id="destination-list-1">
-                      <option value="Amsterdam"></option>
-                      <option value="Geneva"></option>
-                      <option value="Chamonix"></option>
+                      ${destinationName()}
                     </datalist>
                   </div>
 
@@ -99,6 +118,7 @@ const createAddPointTemplate = ()=>(
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                     <div class="event__available-offers">
+                    ${offerTemplate(offers)}
                       <div class="event__offer-selector">
                         <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
                         <label class="event__offer-label" for="event-offer-luggage-1">
@@ -148,14 +168,12 @@ const createAddPointTemplate = ()=>(
 
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">Geneva is a city in Switzerland that lies at the southern tip of expansive Lac Léman (Lake Geneva). Surrounded by the Alps and Jura mountains, the city has views of dramatic Mont Blanc.</p>
+                    <p class="event__destination-description">${description}</p>
 
                     <div class="event__photos-container">
                       <div class="event__photos-tape">
-                        <img class="event__photo" src="img/photos/1.jpg" alt="Event photo">
-                        <img class="event__photo" src="img/photos/2.jpg" alt="Event photo">
-                        <img class="event__photo" src="img/photos/3.jpg" alt="Event photo">
-                        <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">
+                      ${picturesTemplate(pictures)}
+                        
                         <img class="event__photo" src="img/photos/5.jpg" alt="Event photo">
                       </div>
                     </div>
@@ -163,12 +181,17 @@ const createAddPointTemplate = ()=>(
                 </section>
               </form>
             </li>`
-);
+  );};
 
 
-class AddNewPoint {
+class AddEditPoint {
+  constructor(offer, destination){
+    this.offer = offer;
+    this.destination = destination;
+  }
+
   getTemplate() {
-    return createAddPointTemplate();
+    return createAddEditPointTemplate(this.offer, this.destination);
   }
 
   getElement() {
@@ -184,4 +207,4 @@ class AddNewPoint {
   }
 }
 
-export{AddNewPoint};
+export{AddEditPoint};
