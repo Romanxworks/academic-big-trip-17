@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-const duration = require('dayjs/plugin/duration');
-dayjs.extend(duration);
+// const duration = require('dayjs/plugin/duration');
+// dayjs.extend(duration);
 
 const humanizePointDueDate = (dueDate) => dayjs(dueDate).format('H:mm');
 const getTimeDifference = (dateFrom, dateTo)=>{
