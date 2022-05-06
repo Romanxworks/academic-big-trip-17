@@ -18,6 +18,7 @@ const destinationName = ()=>CITIES.map((name)=>destinationNameTemplate(name)).jo
 
 const pictureTemplate = (src)=>`<img class="event__photo" src="${src}" alt="Event photo">`;
 const picturesTemplate = (pictures)=>pictures.map((picture)=>pictureTemplate(picture.src)).join('');
+const checkSection = (element)=> element ?''  :'visually-hidden';
 
 const createAddEditPointTemplate = (offer, destination)=>{
   const {offers} = offer;
@@ -114,7 +115,8 @@ const createAddEditPointTemplate = (offer, destination)=>{
                   <button class="event__reset-btn" type="reset">Cancel</button>
                 </header>
                 <section class="event__details">
-                  <section class="event__section  event__section--offers">
+               
+                <section class="event__section  event__section--offers ${checkSection(offer)}">
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                     <div class="event__available-offers">
@@ -166,7 +168,7 @@ const createAddEditPointTemplate = (offer, destination)=>{
                     </div>
                   </section>
 
-                  <section class="event__section  event__section--destination">
+                  <section class="event__section  event__section--destination ${checkSection(destination)}">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                     <p class="event__destination-description">${description}</p>
 

@@ -11,14 +11,28 @@ const offerElementTemplate = (offer) =>(
 );
 
 const offerTemplate = (offers)=>offers.map((offer)=>offerElementTemplate(offer)).join('');
+const offerPointById =(offers,id)=>{
+  const offerPoints =[];
+  offers.forEach((offer) => {
+    const allOffers = offer.offers;
+    allOffers.forEach((element)=>{
 
-const createNewItemListTemplate = (point)=>{
-  const {basePrice, dateFrom, dateTo, destination, isFavorite, offers, type} = point;
+      if (element.id===id){
+        offerPoints.push(element);
+      }
+    });
+  });
+  return offerPoints;
+};
+
+const createNewItemListTemplate = (point, offers)=>{
+  const {basePrice, dateFrom, dateTo, destination, isFavorite, type, id} = point;
   const favorite =  isFavorite ? 'event__favorite-btn--active' : '';
   const dateEvent = dayjs().format('D MMMM');
   const dateEventFrom = humanizePointDueDate(dateFrom);
   const dateEventTo = humanizePointDueDate(dateTo);
   const timeDifference = getTimeDifference(dateFrom,dateTo);
+  const offerPoint = offerPointById(offers,id);
   return( `<li class="trip-events__item"><div class="event">
     <time class="event__date" datetime="2019-03-18">${dateEvent}</time>
     <div class="event__type">
@@ -43,7 +57,7 @@ const createNewItemListTemplate = (point)=>{
         &plus;&euro;&nbsp;
        <span class="event__offer-price">price</span>
        </li>
-       ${offerTemplate(offers)}
+       ${offerTemplate(offerPoint)}
     </ul>
     <button class="event__favorite-btn ${favorite}" type="button">
       <span class="visually-hidden">Add to favorite</span>
@@ -59,12 +73,13 @@ const createNewItemListTemplate = (point)=>{
 
 
 class ItemList {
-  constructor(point) {
+  constructor(point, offers) {
     this.point = point;
+    this.offers = offers;
   }
 
   getTemplate() {
-    return createNewItemListTemplate(this.point);
+    return createNewItemListTemplate(this.point,this.offers);
   }
 
   getElement() {

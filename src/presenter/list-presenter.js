@@ -2,9 +2,7 @@ import{List} from '../view/list-view.js';
 import{ItemList} from '../view/item-list-view.js';
 import{AddEditPoint} from '../view/add-edit-point-view.js';
 import {render} from '../render.js';
-import {getRandomInteger} from '../utils.js';
 
-const count = getRandomInteger(2, 5);
 class ListPresenter {
   listComponent = new List();
 
@@ -16,10 +14,10 @@ class ListPresenter {
     this.destination = [...this.pointModel.getDestination()];
 
     render(this.listComponent, this.listContainer);
-    render(new AddEditPoint(this.offers[count], this.destination[count]), this.listComponent.getElement());
+    render(new AddEditPoint(this.offers[0], this.destination[1]), this.listComponent.getElement());
 
     for (let i = 0; i < this.pointsList.length; i++) {
-      render(new ItemList(this.pointsList[i]), this.listComponent.getElement());
+      render(new ItemList(this.pointsList[i],this.offers), this.listComponent.getElement());
     }
   };
 }
