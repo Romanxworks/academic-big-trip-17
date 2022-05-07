@@ -1,21 +1,14 @@
 import {getRandomInteger, generateRandomData} from '../utils.js';
 import {TYPE} from './const.js';
 import {createDestination} from './destination.js';
-import {createOffer} from './offer.js';
-
-const offersGroup =  createOffer().offers;
-
-
-const destination = createDestination();
 
 const createPoint = () => ({
   basePrice: getRandomInteger(5,500),
-  dateFrom:'2019-07-10T09:22:20.84',
-  dateTo: '2019-07-11T11:22:13.37',
-  destination,
-  id: getRandomInteger(1,2),
+  dateFrom:`2019-07-1${getRandomInteger(0,1)}T0${getRandomInteger(1,9)}:2${getRandomInteger(0,9)}:20.84`,
+  dateTo: `2019-07-11T1${getRandomInteger(1,9)}:3${getRandomInteger(0,9)}:13.37`,
+  destination:createDestination(),
   isFavorite: Boolean(getRandomInteger(0,1)),
-  offers: offersGroup,
+  offers: [1,2],
   type: generateRandomData(TYPE),
 });
 

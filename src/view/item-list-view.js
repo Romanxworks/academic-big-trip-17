@@ -2,43 +2,39 @@ import {createElement} from '../render.js';
 import dayjs from 'dayjs';
 import {humanizePointDueDate, getTimeDifference} from '../utils.js';
 
-const offerElementTemplate = (offer) =>(
-  `<li class="event__offer">
-  <span class="event__offer-title">${offer.title}</span>
-  &plus;&euro;&nbsp;
-  <span class="event__offer-price">${offer.price}</span>
-  </li>`
-);
 
-const offerTemplate = (offers)=>offers.map((offer)=>offerElementTemplate(offer)).join('');
-const offerPointById =(offers,id)=>{
-  const offerPoints =[];
-  offers.forEach((offer) => {
-    const allOffers = offer.offers;
-    allOffers.forEach((element)=>{
-
-      if (element.id===id){
-        offerPoints.push(element);
-      }
-    });
-  });
-  return offerPoints;
-};
-
-const createNewItemListTemplate = (point, offers)=>{
-  const {basePrice, dateFrom, dateTo, destination, isFavorite, type, id} = point;
+const createNewItemListTemplate = (point, allOffers=[])=>{
+  const {basePrice = 1100,
+    dateFrom = '2019-07-10T22:55:56.845Z',
+    dateTo= '2019-07-11T11:22:13.375Z',
+    destination={name:'City'},
+    isFavorite=true,
+    type='taxi',
+    offers=[]
+  } = point;
+  const offerElementTemplate = (offer) =>{ if(offers.includes(offer.id)){
+    return (
+      `<li class="event__offer">
+    <span class="event__offer-title">${offer.title}</span>
+    &plus;&euro;&nbsp;
+    <span class="event__offer-price">${offer.price}</span>
+    </li>`
+    );}};
   const favorite =  isFavorite ? 'event__favorite-btn--active' : '';
   const dateEvent = dayjs().format('D MMMM');
   const dateEventFrom = humanizePointDueDate(dateFrom);
   const dateEventTo = humanizePointDueDate(dateTo);
   const timeDifference = getTimeDifference(dateFrom,dateTo);
-  const offerPoint = offerPointById(offers,id);
+  const pointTypeOffer = ()=>allOffers.find((offer) =>offer.type === type);
+  const pointOffer = ()=>pointTypeOffer()?pointTypeOffer().offers.map(offerElementTemplate):'';
+  const pointOfferTemplate = pointOffer();
+
   return( `<li class="trip-events__item"><div class="event">
     <time class="event__date" datetime="2019-03-18">${dateEvent}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
     </div>
-    <h3 class="event__title">${type} ${destination.name}</h3>
+    <h3 class="event__title">${type} ${destination.name?destination.name:'City'}</h3>
     <div class="event__schedule">
       <p class="event__time">
         <time class="event__start-time" datetime="2019-03-18T10:30">${dateEventFrom}</time>
@@ -52,12 +48,8 @@ const createNewItemListTemplate = (point, offers)=>{
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      <li class="event__offer">
-       <span class="event__offer-title">title</span>
-        &plus;&euro;&nbsp;
-       <span class="event__offer-price">price</span>
-       </li>
-       ${offerTemplate(offerPoint)}
+      
+    ${pointOfferTemplate}
     </ul>
     <button class="event__favorite-btn ${favorite}" type="button">
       <span class="visually-hidden">Add to favorite</span>

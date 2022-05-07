@@ -1,30 +1,20 @@
 import dayjs from 'dayjs';
-// const duration = require('dayjs/plugin/duration');
-// dayjs.extend(duration);
+
 
 const humanizePointDueDate = (dueDate) => dayjs(dueDate).format('H:mm');
 const getTimeDifference = (dateFrom, dateTo)=>{
   const start = dayjs(dateFrom);
   const end = dayjs(dateTo);
-  const diff = Number(end.diff(start,'m',true).toFixed());
-  const diffH = Number(end.diff(start,'h',true).toFixed());
-  const diffD = Number(end.diff(start,'d',true).toFixed());
-  let result = `${diff}M`;
-  if(diff >= 60){
-    result = `${diffH}H ${diff%60}M`;
+  const differenceToMinute  = Number(end.diff(start,'m',true).toFixed());
+  const differenceToHour = Number(end.diff(start,'h',true).toFixed());
+  const differenceToDay = Number(end.diff(start,'d',true).toFixed());
+  let result = `${differenceToMinute}M`;
+  if(differenceToMinute >= 60){
+    result = `${differenceToHour<= 9? `0${differenceToHour}`:differenceToHour}H ${differenceToMinute%60 <= 9? `0${differenceToMinute%60}`:differenceToMinute%60}M`;
   }
-  if(diffH>=24){
-    result = `${diffD}D ${diffH%24}H ${diff%60}M`;
+  if(differenceToHour>=24){
+    result = `${differenceToDay}D ${differenceToHour%24<= 9? `0${differenceToHour%24}`:differenceToHour%24}H ${differenceToMinute%60 <= 9? `0${differenceToMinute%60}`:differenceToMinute%60}M`;
   }
-  //   const difference = dayjs.duration(end.diff(start)).format('DD/HH/mm').split('/');
-  //   let result = `${difference[0]}D ${difference[1]}H ${difference[2]}M`;
-  //   if(difference[0] === '00'){
-  //     result = `${difference[1]}H ${difference[2]}M`;
-  //     if(difference[1] === '00'){
-  //       result = `${difference[2]}M`;
-  //     }
-  //   }
-
   return result;
 };
 
