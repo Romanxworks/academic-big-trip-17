@@ -3,8 +3,12 @@ import dayjs from 'dayjs';
 
 const humanizePointDueDate = (dueDate) => dayjs(dueDate).format('H:mm');
 const getTimeDifference = (dateFrom, dateTo)=>{
-  const start = dayjs(dateFrom);
-  const end = dayjs(dateTo);
+  let start = dayjs(dateFrom);
+  let end = dayjs(dateTo);
+  if(start.isAfter(end)){
+    start = dayjs(dateTo); end = dayjs(dateFrom);
+  }
+
   const differenceToMinute  = Number(end.diff(start,'m',true).toFixed());
   const differenceToHour = Number(end.diff(start,'h',true).toFixed());
   const differenceToDay = Number(end.diff(start,'d',true).toFixed());
@@ -31,4 +35,12 @@ const generateRandomData = (data) => {
   return data[randomIndex];
 };
 
-export {getRandomInteger, humanizePointDueDate, getTimeDifference, generateRandomData};
+const generateDate = (gap) => {
+
+  const maxDaysGap = 7;
+  const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
+
+  return dayjs().add(daysGap, gap).toISOString();
+};
+
+export {getRandomInteger, humanizePointDueDate, getTimeDifference, generateRandomData, generateDate};

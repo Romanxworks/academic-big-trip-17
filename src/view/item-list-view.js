@@ -26,7 +26,7 @@ const createNewItemListTemplate = (point, allOffers=[])=>{
   const dateEventTo = humanizePointDueDate(dateTo);
   const timeDifference = getTimeDifference(dateFrom,dateTo);
   const pointTypeOffer = ()=>allOffers.find((offer) =>offer.type === type);
-  const pointOffer = ()=>pointTypeOffer()?pointTypeOffer().offers.map(offerElementTemplate):'';
+  const pointOffer = ()=>pointTypeOffer()?pointTypeOffer().offers.map(offerElementTemplate).join(''):'';
   const pointOfferTemplate = pointOffer();
 
   return( `<li class="trip-events__item"><div class="event">

@@ -6,11 +6,11 @@ const createDestination = () => ({
   name: generateRandomData(CITIES),
   pictures: [
     {
-      src: `http://picsum.photos/300/200?r=${getRandomInteger(0,15)}`,
+      src: `http://picsum.photos/300/200?r=${getRandomInteger(8,15)}`,
       description: generateRandomData(DESCRIPTIONS)
     },
     {
-      src: `http://picsum.photos/300/200?r=${getRandomInteger(0,15)}`,
+      src: `http://picsum.photos/300/200?r=${getRandomInteger(0,8)}`,
       description: generateRandomData(DESCRIPTIONS)
     }
   ]
