@@ -1,6 +1,6 @@
 import {createElement} from '../render.js';
 import dayjs from 'dayjs';
-import {humanizePointDueDate, getTimeDifference} from '../utils.js';
+import {humanizePointDate, getTimeDifference} from '../utils.js';
 
 
 const createNewItemListTemplate = (point, allOffers=[])=>{
@@ -12,6 +12,7 @@ const createNewItemListTemplate = (point, allOffers=[])=>{
     type='taxi',
     offers=[]
   } = point;
+
   const offerElementTemplate = (offer) =>{ if(offers.includes(offer.id)){
     return (
       `<li class="event__offer">
@@ -20,10 +21,11 @@ const createNewItemListTemplate = (point, allOffers=[])=>{
     <span class="event__offer-price">${offer.price}</span>
     </li>`
     );}};
+
   const favorite =  isFavorite ? 'event__favorite-btn--active' : '';
   const dateEvent = dayjs().format('D MMMM');
-  const dateEventFrom = humanizePointDueDate(dateFrom);
-  const dateEventTo = humanizePointDueDate(dateTo);
+  const dateEventFrom = humanizePointDate(dateFrom);
+  const dateEventTo = humanizePointDate(dateTo);
   const timeDifference = getTimeDifference(dateFrom,dateTo);
   const pointTypeOffer = ()=>allOffers.find((offer) =>offer.type === type);
   const pointOffer = ()=>pointTypeOffer()?pointTypeOffer().offers.map(offerElementTemplate).join(''):'';
@@ -65,25 +67,30 @@ const createNewItemListTemplate = (point, allOffers=[])=>{
 
 
 class ItemList {
-  constructor(point, offers) {
-    this.point = point;
-    this.offers = offers;
+  #element = null;
+  #point = null;
+  #offer = null;
+
+  constructor(point, offer){
+    this.#offer = offer;
+    this.#point = point;
   }
 
-  getTemplate() {
-    return createNewItemListTemplate(this.point,this.offers);
+
+  get template() {
+    return createNewItemListTemplate(this.#point, this.#offer);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }
 
