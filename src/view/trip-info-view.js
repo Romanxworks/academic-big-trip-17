@@ -15,7 +15,7 @@ const createNewTripInfoTemplate = ()=>(
 );
 
 
-class TripInfo {
+export default class TripInfo {
   #element = null;
 
   get template() {
@@ -34,5 +34,3 @@ class TripInfo {
     this.#element = null;
   }
 }
-
-export{TripInfo};

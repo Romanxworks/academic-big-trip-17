@@ -21,7 +21,7 @@ const createNewListFilterTemplate = ()=>(
     </form>`
 );
 
-class ListFilter {
+export default class ListFilter {
   #element = null;
 
   get template() {
@@ -41,4 +41,3 @@ class ListFilter {
   }
 }
 
-export{ListFilter};

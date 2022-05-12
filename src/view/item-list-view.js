@@ -66,7 +66,7 @@ const createNewItemListTemplate = (point, allOffers=[])=>{
 };
 
 
-class ItemList {
+export default class ItemList {
   #element = null;
   #point = null;
   #offer = null;
@@ -94,4 +94,3 @@ class ItemList {
   }
 }
 
-export{ItemList};

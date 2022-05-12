@@ -172,7 +172,7 @@ const createAddEditPointTemplate = (point, allOffers = [])=>{
   );};
 
 
-class AddEditPoint {
+export default class AddEditPoint {
   #element = null;
   #point = null;
   #offer = null;
@@ -199,4 +199,3 @@ class AddEditPoint {
   }
 }
 
-export{AddEditPoint};

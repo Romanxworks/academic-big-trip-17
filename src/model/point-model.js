@@ -3,7 +3,7 @@ import {createOffer} from '../mock/offer.js';
 
 const LENGTH= 15;
 
-class PointModel {
+export default class PointModel {
   #points = Array.from({length: LENGTH}, createPoint);
   #offers = Array.from({length: LENGTH}, createOffer);
 
@@ -12,4 +12,3 @@ class PointModel {
 
 }
 
-export{PointModel};

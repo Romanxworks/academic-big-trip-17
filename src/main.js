@@ -1,9 +1,9 @@
-import {ListFilter} from './view/list-filter-view.js';
-import {ListSort} from './view/list-sort-view.js';
-import {ListPresenter} from './presenter/list-presenter.js';
-import {TripInfo} from './view/trip-info-view.js';
+import ListFilter from './view/list-filter-view.js';
+import ListSort from './view/list-sort-view.js';
+import ListPresenter from './presenter/list-presenter.js';
+import TripInfo from './view/trip-info-view.js';
 import {render} from './render.js';
-import {PointModel} from './model/point-model.js';
+import PointModel from './model/point-model.js';
 
 const headerElement = document.querySelector('.page-header');
 const filtersElement = headerElement.querySelector('.trip-controls__filters');

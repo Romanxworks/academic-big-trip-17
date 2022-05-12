@@ -3,7 +3,7 @@ import {createElement} from '../render.js';
 const createNewListTemplate = ()=>'<ul class="trip-events__list"></ul>';
 
 
-class List {
+export default class List {
   #element = null;
   get template() {
     return createNewListTemplate();
@@ -22,4 +22,3 @@ class List {
   }
 }
 
-export{List};

@@ -1,9 +1,9 @@
-import{List} from '../view/list-view.js';
-import{ItemList} from '../view/item-list-view.js';
-import{AddEditPoint} from '../view/add-edit-point-view.js';
+import List from '../view/list-view.js';
+import ItemList from '../view/item-list-view.js';
+import AddEditPoint from '../view/add-edit-point-view.js';
 import {render} from '../render.js';
 
-class ListPresenter {
+export default class ListPresenter {
   #listComponent = new List();
   #listContainer = null;
   #pointModel = null;
@@ -60,4 +60,3 @@ class ListPresenter {
   };
 }
 
-export{ListPresenter};

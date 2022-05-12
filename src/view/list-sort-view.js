@@ -29,7 +29,7 @@ const createNewListSortTemplate = ()=>(
 </form>`
 );
 
-class ListSort {
+export default class ListSort {
   #element = null;
 
   get template() {
@@ -49,4 +49,3 @@ class ListSort {
   }
 }
 
-export{ListSort};
