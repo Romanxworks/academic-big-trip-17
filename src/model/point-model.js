@@ -1,23 +1,14 @@
 import {createPoint} from '../mock/point.js';
 import {createOffer} from '../mock/offer.js';
-import {createDestination} from '../mock/destination.js';
 
-const QUANTITY_POINT = 15;
-const QUANTITY_OFFER = 5;
-const QUANTITY_DESTINATION
-= 5;
-class PointModel {
-  point = Array.from({length: QUANTITY_POINT}, createPoint);
+const LENGTH= 15;
 
-  getPoint = () => this.point;
+export default class PointModel {
+  #points = Array.from({length: LENGTH}, createPoint);
+  #offers = Array.from({length: LENGTH}, createOffer);
 
-  offers = Array.from({length: QUANTITY_OFFER}, createOffer);
+  get point() {return this.#points;}
+  get offer() {return this.#offers;}
 
-  getOffer = () => this.offers;
-
-  destination = Array.from({length: QUANTITY_DESTINATION}, createDestination);
-
-  getDestination = () => this.destination;
 }
 
-export{PointModel};

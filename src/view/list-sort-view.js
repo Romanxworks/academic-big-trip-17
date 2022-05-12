@@ -29,22 +29,23 @@ const createNewListSortTemplate = ()=>(
 </form>`
 );
 
-class ListSort {
-  getTemplate() {
+export default class ListSort {
+  #element = null;
+
+  get template() {
     return createNewListSortTemplate();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }
 
-export{ListSort};
