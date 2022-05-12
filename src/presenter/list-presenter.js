@@ -1,6 +1,8 @@
 import List from '../view/list-view.js';
 import ItemList from '../view/item-list-view.js';
 import AddEditPoint from '../view/add-edit-point-view.js';
+import ListEmpty from '../view/list-empty-view.js';
+import ListSort from '../view/list-sort-view.js';
 import {render} from '../render.js';
 
 export default class ListPresenter {
@@ -9,6 +11,8 @@ export default class ListPresenter {
   #pointModel = null;
   #pointsList = [];
   #offers = [];
+  #listEmpty = new ListEmpty();
+  #listSort = new ListSort();
 
   init = (listContainer, pointModel) => {
     this.#listContainer = listContainer;
@@ -16,10 +20,14 @@ export default class ListPresenter {
     this.#pointsList = [...this.#pointModel.point];
     this.#offers = [...this.#pointModel.offer];
 
-    render(this.#listComponent, this.#listContainer);
-
-    for (let i = 0; i < this.#pointsList.length; i++) {
-      this.#renderPoint(this.#pointsList[i], this.#offers);
+    if(this.#pointsList.length === 0){
+      render(this.#listEmpty, this.#listContainer);
+    }else{
+      render(this.#listSort , this.#listContainer);
+      render(this.#listComponent, this.#listContainer);
+      for (let i = 0; i < this.#pointsList.length; i++) {
+        this.#renderPoint(this.#pointsList[i], this.#offers);
+      }
     }
   };
 
