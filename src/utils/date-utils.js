@@ -1,8 +1,9 @@
 import dayjs from 'dayjs';
-
-
+import {getRandomInteger} from './random-data-utils.js';
 const humanizePointDate = (date) => dayjs(date).format('H:mm');
+
 const pointDateAddEdit = (date) => dayjs(date).format('DD/MM/YY H:mm');
+
 const getTimeDifference = (dateFrom, dateTo)=>{
   let start = dayjs(dateFrom);
   let end = dayjs(dateTo);
@@ -23,19 +24,6 @@ const getTimeDifference = (dateFrom, dateTo)=>{
   return result;
 };
 
-const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
-
-const generateRandomData = (data) => {
-  const randomIndex = getRandomInteger(0, data.length - 1);
-
-  return data[randomIndex];
-};
-
 const generateDate = (gapType) => {
 
   const maxGap = 7;
@@ -44,4 +32,4 @@ const generateDate = (gapType) => {
   return dayjs().add(gap, gapType).toISOString();
 };
 
-export {getRandomInteger, humanizePointDate, getTimeDifference, generateRandomData, generateDate, pointDateAddEdit};
+export {humanizePointDate, getTimeDifference, generateDate, pointDateAddEdit};

@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const createNewListSortTemplate = ()=>(
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
@@ -29,23 +29,9 @@ const createNewListSortTemplate = ()=>(
 </form>`
 );
 
-export default class ListSort {
-  #element = null;
-
+export default class ListSort extends AbstractView {
   get template() {
     return createNewListSortTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
 
