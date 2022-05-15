@@ -1,4 +1,4 @@
-import {getRandomInteger, generateRandomData} from '../utils.js';
+import {getRandomInteger, generateRandomData} from '../utils/random-data-utils.js';
 import {CITIES,DESCRIPTIONS} from './const.js';
 
 const createDestination = () => ({

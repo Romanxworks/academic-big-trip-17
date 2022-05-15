@@ -1,4 +1,4 @@
-import {getRandomInteger, generateRandomData} from '../utils.js';
+import {getRandomInteger, generateRandomData} from '../utils/random-data-utils.js';
 import {TYPE} from './const.js';
 
 const createOffer = () => ({
@@ -7,17 +7,17 @@ const createOffer = () => ({
     {
       id: 1,
       title: 'Upgrade class',
-      price: getRandomInteger(0,150)
+      price: getRandomInteger(1,150)
     },
     {
       id: 3,
       title: 'Choose the radio station',
-      price: getRandomInteger(0,50)
+      price: getRandomInteger(1,50)
     },
     {
       id: 5,
       title: 'Check seats',
-      price: getRandomInteger(0,100)
+      price: getRandomInteger(1,100)
     }
   ]
 });

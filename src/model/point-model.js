@@ -1,7 +1,7 @@
 import {createPoint} from '../mock/point.js';
 import {createOffer} from '../mock/offer.js';
 
-const LENGTH= 0;
+const LENGTH= 15;
 
 export default class PointModel {
   #points = Array.from({length: LENGTH}, createPoint);

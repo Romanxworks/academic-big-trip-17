@@ -1,6 +1,6 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {CITIES} from '../mock/const.js';
-import {pointDateAddEdit} from '../utils.js';
+import {pointDateAddEdit} from '../utils/date-utils.js';
 
 const destinationNameTemplate = (name)=>`<option value="${name}"></option>`;
 const destinationName = ()=>CITIES.map((name)=>destinationNameTemplate(name)).join('');
@@ -172,12 +172,12 @@ const createAddEditPointTemplate = (point, allOffers = [])=>{
   );};
 
 
-export default class AddEditPoint {
-  #element = null;
+export default class AddEditPoint extends AbstractView{
   #point = null;
   #offer = null;
 
   constructor(point, offer){
+    super();
     this.#offer = offer;
     this.#point = point;
   }
@@ -186,16 +186,24 @@ export default class AddEditPoint {
     return createAddEditPointTemplate(this.#point, this.#offer);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  setEditClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.addEventListener('click', this.#editClickHandler);
+  };
 
-    return this.#element;
-  }
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  };
 
-  removeElement() {
-    this.#element = null;
-  }
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+  };
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  };
 }
 

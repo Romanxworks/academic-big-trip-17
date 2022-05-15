@@ -3,7 +3,7 @@ import ItemList from '../view/item-list-view.js';
 import AddEditPoint from '../view/add-edit-point-view.js';
 import ListEmpty from '../view/list-empty-view.js';
 import ListSort from '../view/list-sort-view.js';
-import {render} from '../render.js';
+import {render, replace} from '../framework/render.js';
 
 export default class ListPresenter {
   #listComponent = new List();
@@ -36,11 +36,11 @@ export default class ListPresenter {
     const addEditPointComponent = new AddEditPoint(point, offers);
 
     const replacePointToForm = () => {
-      this.#listComponent.element.replaceChild(addEditPointComponent.element, pointComponent.element);
+      replace(addEditPointComponent, pointComponent);
     };
 
     const replaceFormToPoint = () => {
-      this.#listComponent.element.replaceChild(pointComponent.element, addEditPointComponent.element);
+      replace(pointComponent, addEditPointComponent);
     };
     const onEscKeyDown = (evt) => {
       if (evt.key === 'Escape' || evt.key === 'Esc') {
@@ -50,16 +50,16 @@ export default class ListPresenter {
       }
     };
 
-    pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    pointComponent.setEditClickHandler(() => {
       replacePointToForm();
       document.addEventListener('keydown', onEscKeyDown);
     });
-    addEditPointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    addEditPointComponent.setEditClickHandler(() => {
       replaceFormToPoint();
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    addEditPointComponent.element.querySelector('form').addEventListener('submit', (evt) => {
+    addEditPointComponent.setFormSubmitHandler((evt) => {
       evt.preventDefault();
       replaceFormToPoint();
       document.removeEventListener('keydown', onEscKeyDown);

@@ -1,7 +1,7 @@
 import ListFilter from './view/list-filter-view.js';
 import ListPresenter from './presenter/list-presenter.js';
 import TripInfo from './view/trip-info-view.js';
-import {render} from './render.js';
+import {render} from './framework/render.js';
 import PointModel from './model/point-model.js';
 
 const headerElement = document.querySelector('.page-header');
