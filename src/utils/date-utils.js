@@ -26,7 +26,7 @@ const getTimeDifference = (dateFrom, dateTo)=>{
 
 const generateDate = (gapType) => {
 
-  const maxGap = 7;
+  const maxGap = getRandomInteger(3,10);
   const gap = getRandomInteger(-maxGap, maxGap);
 
   return dayjs().add(gap, gapType).toISOString();

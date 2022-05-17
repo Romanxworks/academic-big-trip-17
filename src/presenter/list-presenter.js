@@ -1,10 +1,9 @@
 import List from '../view/list-view.js';
-import ItemList from '../view/item-list-view.js';
-import AddEditPoint from '../view/add-edit-point-view.js';
 import ListEmpty from '../view/list-empty-view.js';
 import ListSort from '../view/list-sort-view.js';
-import {render, replace} from '../framework/render.js';
-
+import {render} from '../framework/render.js';
+import PointPresenter from './point-presenter.js';
+import {updateItem} from '../utils/common.js';
 export default class ListPresenter {
   #listComponent = new List();
   #listContainer = null;
@@ -13,58 +12,57 @@ export default class ListPresenter {
   #offers = [];
   #listEmpty = new ListEmpty();
   #listSort = new ListSort();
+  #pointPresenter = new Map();
 
-  init = (listContainer, pointModel) => {
+  constructor(listContainer, pointModel){
     this.#listContainer = listContainer;
     this.#pointModel = pointModel;
+  }
+
+  init = () => {
     this.#pointsList = [...this.#pointModel.point];
     this.#offers = [...this.#pointModel.offer];
+    this.#renderList();
+  };
 
+  #renderList = () => {
     if(this.#pointsList.length === 0){
-      render(this.#listEmpty, this.#listContainer);
+      this.#renderListEmty();
     }else{
-      render(this.#listSort , this.#listContainer);
-      render(this.#listComponent, this.#listContainer);
-      for (let i = 0; i < this.#pointsList.length; i++) {
-        this.#renderPoint(this.#pointsList[i], this.#offers);
-      }
+      this.#renderListSort();
+      this.#renderlistComponent();
+      this.#renderPoints();
     }
   };
 
+  #renderlistComponent = () => render(this.#listComponent, this.#listContainer);
+
+  #renderListSort = () => render(this.#listSort , this.#listContainer);
+
+  #renderListEmty = () => render(this.#listEmpty, this.#listContainer);
+
+  #renderPoints = () => {
+    this.#pointsList.slice().forEach((point)=>this.#renderPoint(point, this.#offers));
+  };
+
   #renderPoint = (point, offers) => {
-    const pointComponent = new ItemList(point, offers);
-    const addEditPointComponent = new AddEditPoint(point, offers);
+    const pointPresenter = new PointPresenter(this.#listComponent.element, this.#handlePointChange,  this.#handleModeChange);
+    pointPresenter.init(point, offers);
+    this.#pointPresenter.set(point.id, pointPresenter);
+  };
 
-    const replacePointToForm = () => {
-      replace(addEditPointComponent, pointComponent);
-    };
+  #clearPointList = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.destroy());
+    this.#pointPresenter.clear();
+  };
 
-    const replaceFormToPoint = () => {
-      replace(pointComponent, addEditPointComponent);
-    };
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replaceFormToPoint();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
+  #handlePointChange = (updatedPoint) => {
+    this.#pointsList = updateItem(this.#pointsList, updatedPoint);
+    this.#pointPresenter.get(updatedPoint.id).init(updatedPoint, this.#offers);
+  };
 
-    pointComponent.setEditClickHandler(() => {
-      replacePointToForm();
-      document.addEventListener('keydown', onEscKeyDown);
-    });
-    addEditPointComponent.setEditClickHandler(() => {
-      replaceFormToPoint();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-
-    addEditPointComponent.setFormSubmitHandler((evt) => {
-      evt.preventDefault();
-      replaceFormToPoint();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-    render(pointComponent, this.#listComponent.element);
+  #handleModeChange = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.resetView());
   };
 }
 
