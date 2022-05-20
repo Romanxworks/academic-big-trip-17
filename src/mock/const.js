@@ -9,5 +9,10 @@ const DESCRIPTIONS=[
   'Aliquam id orci ut lectus varius viverra.',
   'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.'
 ];
+const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PAST: 'past'
+};
 
-export{TYPE,CITIES,DESCRIPTIONS};
+export{TYPE, CITIES, DESCRIPTIONS, FilterType};
