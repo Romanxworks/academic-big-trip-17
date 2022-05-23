@@ -32,4 +32,8 @@ const generateDate = (gapType) => {
   return dayjs().add(gap, gapType).toISOString();
 };
 
-export {humanizePointDate, getTimeDifference, generateDate, pointDateAddEdit};
+const isFutureDate = (dateFrom, dateTo) => dayjs().isBefore(dayjs(dateFrom))||dayjs().isSame(dayjs(dateFrom))||dayjs().isBefore(dayjs(dateTo));
+
+const isPastDate = (date) => dayjs().isAfter(dayjs(date));
+
+export {humanizePointDate, getTimeDifference, generateDate, pointDateAddEdit, isFutureDate, isPastDate};
