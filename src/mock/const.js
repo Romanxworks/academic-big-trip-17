@@ -1,4 +1,4 @@
-const TYPE = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+const TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 const CITIES = ['Moscow', 'Saint-Petersburg', 'Voronezh', 'Belgorod', 'Volgograd', 'Gelendzhik', 'Krasnodar'];
 
@@ -15,4 +15,4 @@ const FilterType = {
   PAST: 'past'
 };
 
-export{TYPE, CITIES, DESCRIPTIONS, FilterType};
+export{TYPES, CITIES, DESCRIPTIONS, FilterType};

@@ -12,7 +12,7 @@ const tripEventsElement = pageMainElement.querySelector('.trip-events');
 const tripMain = document.querySelector('.trip-main');
 const pointModel = new PointModel();
 const listPresenter = new ListPresenter(tripEventsElement, pointModel);
-const filters = generateFilter(pointModel.point);
+const filters = generateFilter(pointModel.points);
 
 render(new TripInfo(),tripMain, 'afterbegin');
 render(new ListFilter(filters),filtersElement);

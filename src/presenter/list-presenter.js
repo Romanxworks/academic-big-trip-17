@@ -10,6 +10,7 @@ export default class ListPresenter {
   #pointModel = null;
   #pointsList = [];
   #offers = [];
+  #destinations = [];
   #listEmpty = new ListEmpty();
   #listSort = new ListSort();
   #pointPresenter = new Map();
@@ -20,8 +21,9 @@ export default class ListPresenter {
   }
 
   init = () => {
-    this.#pointsList = [...this.#pointModel.point];
-    this.#offers = [...this.#pointModel.offer];
+    this.#pointsList = [...this.#pointModel.points];
+    this.#offers = [...this.#pointModel.offers];
+    this.#destinations = [...this.#pointModel.destinations];
     this.#renderList();
   };
 
@@ -42,12 +44,12 @@ export default class ListPresenter {
   #renderListEmty = () => render(this.#listEmpty, this.#listContainer);
 
   #renderPoints = () => {
-    this.#pointsList.slice().forEach((point)=>this.#renderPoint(point, this.#offers));
+    this.#pointsList.slice().forEach((point)=>this.#renderPoint(point, this.#offers, this.#destinations));
   };
 
-  #renderPoint = (point, offers) => {
+  #renderPoint = (point, offers, destinations) => {
     const pointPresenter = new PointPresenter(this.#listComponent.element, this.#handlePointChange,  this.#handleModeChange);
-    pointPresenter.init(point, offers);
+    pointPresenter.init(point, offers, destinations);
     this.#pointPresenter.set(point.id, pointPresenter);
   };
 
@@ -58,7 +60,7 @@ export default class ListPresenter {
 
   #handlePointChange = (updatedPoint) => {
     this.#pointsList = updateItem(this.#pointsList, updatedPoint);
-    this.#pointPresenter.get(updatedPoint.id).init(updatedPoint, this.#offers);
+    this.#pointPresenter.get(updatedPoint.id).init(updatedPoint, this.#offers,this.#destinations);
   };
 
   #handleModeChange = () => {
