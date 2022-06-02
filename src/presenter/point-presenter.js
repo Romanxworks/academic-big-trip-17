@@ -94,6 +94,7 @@ export default class PointPresenter {
 
   #handleToPointClick = () => {
     this.#replaceFormToPoint();
+    document.removeEventListener('keydown', this.#onEscKeyDown);
   };
 
   #handleFormSubmit = (point) => {
