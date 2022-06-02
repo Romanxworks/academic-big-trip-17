@@ -9,10 +9,10 @@ const sortByTime = (pointA, pointB) =>{
 };
 
 const sortByDay = (pointA, pointB) => {
-  if(dayjs(pointA.dateFrom).isBefore(dayjs(pointB.dateFrom))){
+  if(dayjs(pointB.dateFrom).isBefore(dayjs(pointA.dateFrom))){
     return 1;
   }
-  if(dayjs(pointA.dateFrom).isAfter(dayjs(pointB.dateFrom))){
+  if(dayjs(pointB.dateFrom).isAfter(dayjs(pointA.dateFrom))){
     return -1;
   }
   return 0;

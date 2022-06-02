@@ -99,9 +99,9 @@ export default class ListPresenter {
 
     this.#sortPoints(sortType);
     // - Очищаем список
-    // - Рендерим список заново
     this.#clearPointList();
-    this.#renderPoint();
+    // - Рендерим список заново
+    this.#renderPoints();
   };
 }
 
