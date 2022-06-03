@@ -7,7 +7,8 @@ const pointDateAddEdit = (date) => dayjs(date).format('DD/MM/YY H:mm');
 const getTimeDifference = (dateFrom, dateTo)=>{
   let start = dayjs(dateFrom);
   let end = dayjs(dateTo);
-  if(start.isAfter(end)){
+
+  if(start.isAfter(end,'minute')){
     start = dayjs(dateTo); end = dayjs(dateFrom);
   }
 

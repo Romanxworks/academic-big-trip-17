@@ -1,19 +1,16 @@
 import {getRandomInteger, generateRandomData} from '../utils/random-data-utils.js';
 import {CITIES,DESCRIPTIONS} from './const.js';
 
-const createDestination = () => ({
-  description: generateRandomData(DESCRIPTIONS),
-  name: generateRandomData(CITIES),
-  pictures: [
-    {
-      src: `http://picsum.photos/300/200?r=${getRandomInteger(8,15)}`,
-      description: generateRandomData(DESCRIPTIONS)
-    },
-    {
-      src: `http://picsum.photos/300/200?r=${getRandomInteger(0,8)}`,
-      description: generateRandomData(DESCRIPTIONS)
-    }
-  ]
+const createPictures = () => ({
+  src: `http://picsum.photos/300/200?r=${getRandomInteger(1,15)}`,
+  description: generateRandomData(DESCRIPTIONS)
 });
 
-export{createDestination};
+const createDestination = (city) => ({
+  description: generateRandomData(DESCRIPTIONS),
+  name: city,
+  pictures: Array.from({length: getRandomInteger(2,6)}, createPictures)
+});
+const createDestinations = () => CITIES.map((city) => createDestination(city));
+
+export{createDestinations};

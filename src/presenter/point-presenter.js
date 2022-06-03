@@ -13,6 +13,7 @@ export default class PointPresenter {
   #addEditPointComponent = null;
   #point = null;
   #offers = null;
+  #destinations = null;
   #pointChange = null;
   #modeChange = null;
   #mode = Mode.DEFAULT;
@@ -23,15 +24,16 @@ export default class PointPresenter {
     this.#modeChange = modeChange;
   }
 
-  init = (point, offers) =>{
+  init = (point, offers, destinations) =>{
     this.#point = point;
     this.#offers = offers;
+    this.#destinations = destinations;
 
     const prePointComponent = this.#pointComponent;
     const preAddEditPointComponent = this.#addEditPointComponent;
 
     this.#pointComponent = new ItemList(this.#point, this.#offers);
-    this.#addEditPointComponent = new AddEditPoint(this.#point, this.#offers);
+    this.#addEditPointComponent = new AddEditPoint(this.#point, this.#offers, this.#destinations);
 
     this.#pointComponent.setEditClickHandler(this.#handleToEditClick);
     this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
@@ -92,6 +94,7 @@ export default class PointPresenter {
 
   #handleToPointClick = () => {
     this.#replaceFormToPoint();
+    document.removeEventListener('keydown', this.#onEscKeyDown);
   };
 
   #handleFormSubmit = (point) => {

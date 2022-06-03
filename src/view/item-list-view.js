@@ -21,9 +21,10 @@ const createNewItemListTemplate = (point, allOffers=[]) => {
     <span class="event__offer-price">${offer.price}</span>
     </li>`
     );}};
-
+  // console.log(dayjs(dateFrom).diff(dayjs(dateTo), 'm'));
+  // console.log(dayjs(dateFrom), dayjs(dateTo));
   const favorite =  isFavorite ? 'event__favorite-btn--active' : '';
-  const dateEvent = dayjs().format('D MMMM');
+  const dateEvent = dayjs(dateFrom).format('D MMMM');
   const dateEventFrom = humanizePointDate(dateFrom);
   const dateEventTo = humanizePointDate(dateTo);
   const timeDifference = getTimeDifference(dateFrom,dateTo);
