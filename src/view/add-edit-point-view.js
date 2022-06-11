@@ -1,14 +1,15 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import {CITIES, TYPES} from '../mock/const.js';
+import {CITIES, TYPES} from '../const.js';
 import {pointDateAddEdit} from '../utils/date-utils.js';
 import flatpickr from 'flatpickr';
+import he from 'he';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
 const BLANK_POINT = {
   basePrice: 100,
-  dateFrom: '2019-07-10T22:55:56.845Z',
-  dateTo: '2019-07-11T11:22:13.375Z',
+  dateFrom: '2022-07-10T22:55:56.845Z',
+  dateTo: '2022-07-11T11:22:13.375Z',
   destination: {
     description: ' ',
     name: ' ',
@@ -82,10 +83,13 @@ const getPointTypeOffer = (offers, pointType) => {
   return pointTypeOffer? pointTypeOffer : null;
 };
 const getDestinationByPoint = (destinations, stateDestination) => {
-  const destinationByPoint = destinations.find((destination) => destination.name === stateDestination.name);
-  return destinationByPoint;
+  if(stateDestination.name !== ' '){
+    const destinationByPoint = destinations.find((destination) => destination.name === stateDestination.name);
+    return destinationByPoint;
+  }
+  return destinations[0];
 };
-const createAddEditPointTemplate = (point, offers = [], destinations= []) => {
+const createAddEditPointTemplate = ( offers = [], destinations= [], point) => {
   const {basePrice,
     stateDateFrom,
     stateDateTo,
@@ -95,6 +99,7 @@ const createAddEditPointTemplate = (point, offers = [], destinations= []) => {
   } = point;
 
   const destinationByPoint = getDestinationByPoint(destinations,stateDestination);
+
   const destinationByPointTemplate = destinationTemplate(destinationByPoint);
   const pointTypeOffer = getPointTypeOffer(offers, stateType);
   const createPointOffer = (offerPoint) => pointTypeOffer ? pointTypeOffer.offers.map((offer)=>offerElementTemplate(offer, offerPoint)).join(''): '';
@@ -126,7 +131,7 @@ const createAddEditPointTemplate = (point, offers = [], destinations= []) => {
                     <label class="event__label  event__type-output" for="event-destination-1">
                     ${stateType}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${stateDestination.name}" list="destination-list-1">
+                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(stateDestination.name)}" list="destination-list-1">
                     <datalist id="destination-list-1">
                       ${destinationList}
                     </datalist>
@@ -145,14 +150,14 @@ const createAddEditPointTemplate = (point, offers = [], destinations= []) => {
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+                    <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice}">
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                  <button class="event__reset-btn" type="reset">${stateDestination.name === '' ? 'Delete' : 'Cancel'}</button>
-                  <button class="event__rollup-btn" type="button">
-                    <span class="visually-hidden">Open event</span>
-                  </button>
+                  <button class="event__reset-btn" type="reset">${stateDestination.description !== ' ' ? 'Delete' : 'Cancel'}</button>
+                  ${stateDestination.description !== ' ' ?  `<button class="event__rollup-btn" type="button">
+                  <span class="visually-hidden">Open event</span>
+                </button> ` : ''}  
                 </header>
                 <section class="event__details">
                
@@ -175,7 +180,7 @@ export default class AddEditPoint extends AbstractStatefulView{
   #offer = null;
   #datepicker = null;
 
-  constructor(point = BLANK_POINT, offers, destinations){
+  constructor(offers, destinations, point = BLANK_POINT ){
     super();
     this.#offer = offers;
     this.#destinations = destinations;
@@ -186,7 +191,7 @@ export default class AddEditPoint extends AbstractStatefulView{
   }
 
   get template() {
-    return createAddEditPointTemplate(this._state, this.#offer, this.#destinations);
+    return createAddEditPointTemplate(this.#offer, this.#destinations, this._state);
   }
 
   reset = (point) => {
@@ -210,11 +215,14 @@ export default class AddEditPoint extends AbstractStatefulView{
     this.#setDatepickerTo();
     this.setEditClickHandler(this._callback.click);
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   };
 
   setEditClickHandler = (callback) => {
     this._callback.click = callback;
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+    const editHandler = this.element.querySelector('.event__rollup-btn');
+    if(editHandler){
+      editHandler.addEventListener('click', this.#editClickHandler);}
   };
 
   #editClickHandler = (evt) => {
@@ -232,7 +240,7 @@ export default class AddEditPoint extends AbstractStatefulView{
       this.element.querySelector('#event-start-time-1'),
       {
         enableTime: true,
-        dateFormat: 'd-m-y H:i',
+        dateFormat: 'd/m/y H:i',
         maxDate:this._state.stateDateTo,
         defaultDate: this._state.stateDateFrom,
         onChange: this.#setDateFromHandler,
@@ -245,7 +253,7 @@ export default class AddEditPoint extends AbstractStatefulView{
       this.element.querySelector('#event-end-time-1'),
       {
         enableTime: true,
-        dateFormat: 'd-m-y H:i',
+        dateFormat: 'd/m/y H:i',
         minDate:this._state.stateDateFrom,
         defaultDate: this._state.stateDateTo,
         onChange: this.#setDateToHandler,
@@ -267,7 +275,7 @@ export default class AddEditPoint extends AbstractStatefulView{
 
   #destinationNameToggleHandler = (evt) => {
     evt.preventDefault();
-    this._state.stateDestination.name= evt.target.value;
+    this._state.stateDestination.name = evt.target.value;
     this.updateElement({stateDestination:this._state.stateDestination});
   };
 
@@ -290,6 +298,16 @@ export default class AddEditPoint extends AbstractStatefulView{
       .addEventListener('change', this.#typeToggleHandler);
     this.element.querySelector('.event__input--destination')
       .addEventListener('change', this.#destinationNameToggleHandler);
+  };
+
+  setDeleteClickHandler = (callback) => {
+    this._callback.deleteClick = callback;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
+  };
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.deleteClick(AddEditPoint.parseStateToPoint(this._state));
   };
 
   static parsePointToState = (point) => ({...point,
