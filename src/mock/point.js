@@ -1,6 +1,6 @@
 import {getRandomInteger, generateRandomData} from '../utils/random-data-utils.js';
 import {generateDate} from '../utils/date-utils.js';
-import {TYPES} from './const.js';
+import {TYPES} from '../const.js';
 import {nanoid} from 'nanoid';
 import {createDestinations} from './destination.js';
 

@@ -1,5 +1,5 @@
 import {getRandomInteger, generateRandomData} from '../utils/random-data-utils.js';
-import {TYPES} from './const.js';
+import {TYPES} from '../const.js';
 
 const createOffer = () => ({
   type: generateRandomData(TYPES),
