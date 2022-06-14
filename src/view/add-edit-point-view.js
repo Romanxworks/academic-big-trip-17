@@ -1,5 +1,5 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import {CITIES, TYPES} from '../const.js';
+import {TYPES} from '../const.js';
 import {pointDateAddEdit} from '../utils/date-utils.js';
 import flatpickr from 'flatpickr';
 import he from 'he';
@@ -25,8 +25,12 @@ const BLANK_POINT = {
 };
 
 const destinationNameTemplate = (name) => `<option value="${name}"></option>`;
-const destinationName = () => CITIES.map((name) => destinationNameTemplate(name)).join('');
-
+const destinationName = (destinationsNames) => destinationsNames.map((name) => destinationNameTemplate(name)).join('');
+const getDestinationName = (destinations) => {
+  const destinationsNames = [];
+  destinations.map((destination)=> destinationsNames.push(destination.name));
+  return destinationsNames;
+};
 const pictureTemplate = (src) => `<img class="event__photo" src="${src}" alt="Event photo">`;
 const picturesTemplate = (pictures) => pictures.map((picture)=>pictureTemplate(picture.src)).join('');
 const destinationTemplate = (destination) =>(`<section class="event__section  event__section--destination">
@@ -55,12 +59,11 @@ const typeListTempalte = (type, pointType) => {
 const createTypeList = (pointType) => TYPES.map((type)=>typeListTempalte(type, pointType)).join('');
 
 const offerElementTemplate = (offer, offerPoint) => {
-  const offreLabel = ((offer.title).split(' ')[0]).toLowerCase();
 
   if(offerPoint.includes(offer.id)){
     return (`<div class="event__offer-selector">
-       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offreLabel}" type="checkbox" name="event-offer-${offreLabel}" checked>
-        <label class="event__offer-label" for="event-offer-${offreLabel}">
+       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox" name="event-offer-${offer.id}" checked>
+        <label class="event__offer-label" for="event-offer-${offer.id}">
         <span class="event__offer-title">${offer.title}</span>
          &plus;&euro;&nbsp;
         <span class="event__offer-price">${offer.price}</span>
@@ -68,8 +71,8 @@ const offerElementTemplate = (offer, offerPoint) => {
     </div>`
     );}
   return (`<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offreLabel}" type="checkbox" name="event-offer-${offreLabel}">
-       <label class="event__offer-label" for="event-offer-${offreLabel}">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox" name="event-offer-${offer.id}">
+       <label class="event__offer-label" for="event-offer-${offer.id}">
        <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
        <span class="event__offer-price">${offer.price}</span>
@@ -90,14 +93,13 @@ const getDestinationByPoint = (destinations, stateDestination) => {
   return destinations[0];
 };
 const createAddEditPointTemplate = ( offers = [], destinations= [], point) => {
-  const {basePrice,
+  const {statePrice,
     stateDateFrom,
     stateDateTo,
     stateDestination,
     stateType,
     offers: offersPoint,
   } = point;
-
   const destinationByPoint = getDestinationByPoint(destinations,stateDestination);
 
   const destinationByPointTemplate = destinationTemplate(destinationByPoint);
@@ -105,7 +107,8 @@ const createAddEditPointTemplate = ( offers = [], destinations= [], point) => {
   const createPointOffer = (offerPoint) => pointTypeOffer ? pointTypeOffer.offers.map((offer)=>offerElementTemplate(offer, offerPoint)).join(''): '';
   const pointOffers = createPointOffer(offersPoint);
   const typeList =  createTypeList(stateType);
-  const destinationList = destinationName();
+  const destinationsNames = getDestinationName(destinations);
+  const destinationList = destinationName(destinationsNames);
   const pointDateFrom = pointDateAddEdit(stateDateFrom);
   const pointDateTo = pointDateAddEdit(stateDateTo);
 
@@ -150,7 +153,7 @@ const createAddEditPointTemplate = ( offers = [], destinations= [], point) => {
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice}">
+                    <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${statePrice}">
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -286,6 +289,11 @@ export default class AddEditPoint extends AbstractStatefulView{
     });
   };
 
+  #priceToggleHandler = (evt) => {
+    evt.preventDefault();
+    this.updateElement({statePrice:Number(evt.target.value)});
+  };
+
   #setDateToHandler = ([userDateTo]) =>{
     const dateTo = userDateTo.toISOString();
     this._setState({
@@ -298,6 +306,7 @@ export default class AddEditPoint extends AbstractStatefulView{
       .addEventListener('change', this.#typeToggleHandler);
     this.element.querySelector('.event__input--destination')
       .addEventListener('change', this.#destinationNameToggleHandler);
+    this.element.querySelector('.event__input--price').addEventListener('change', this.#priceToggleHandler);
   };
 
   setDeleteClickHandler = (callback) => {
@@ -314,7 +323,8 @@ export default class AddEditPoint extends AbstractStatefulView{
     stateDateFrom: point.dateFrom,
     stateDateTo: point.dateTo,
     stateDestination: point.destination,
-    stateType: point.type
+    stateType: point.type,
+    statePrice: point.basePrice
   });
 
   static parseStateToPoint = (state) => {
@@ -324,6 +334,7 @@ export default class AddEditPoint extends AbstractStatefulView{
     point.destination = point.stateDestination;
     point.dateFrom = point.stateDateFrom;
     point.dateTo = point.stateDateTo;
+    point.basePrice = point.statePrice;
 
     if(!point.stateDestination){
       point.destination = {
@@ -345,6 +356,7 @@ export default class AddEditPoint extends AbstractStatefulView{
     delete point.stateType;
     delete point.stateDateFrom;
     delete point.stateDateTo;
+    delete point.statePrice;
 
     return point;
   };
