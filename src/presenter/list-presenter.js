@@ -1,10 +1,11 @@
 import List from '../view/list-view.js';
 import ListEmpty from '../view/list-empty-view.js';
 import ListSort from '../view/list-sort-view.js';
-import {remove, render} from '../framework/render.js';
+import {remove,RenderPosition, render} from '../framework/render.js';
 import {filter} from '../utils/filter.js';
 import PointNewPresenter from './point-new-presenter.js';
 import PointPresenter from './point-presenter.js';
+import LoadingView from '../view/loading-view.js';
 import {sortByPrice, sortByTime, sortByDay} from '../utils/sort.js';
 import {SortType, UpdateType, UserAction, FilterType} from '../const.js';
 
@@ -13,14 +14,14 @@ export default class ListPresenter {
   #listContainer = null;
   #pointModel = null;
   #listEmtyConponent = null;
-  #offers = [];
-  #destinations = [];
   #pointPresenter = new Map();
   #pointNewPresenter = null;
   #currentSortType = SortType.DAY;
   #sortComponent = null;
   #filterModel = null;
   #filterType = FilterType.EVERYTHING;
+  #loadingComponent = new LoadingView();
+  #isLoading = true;
 
   constructor(listContainer, pointModel, filterModel){
     this.#listContainer = listContainer;
@@ -35,7 +36,6 @@ export default class ListPresenter {
     this.#filterType = this.#filterModel.filter;
     const points = this.#pointModel.points;
     const filteredPoints = filter[this.#filterType](points);
-
     switch (this.#currentSortType) {
       case SortType.TIME:
         return filteredPoints.sort(sortByTime);
@@ -48,36 +48,47 @@ export default class ListPresenter {
     return filteredPoints;
   }
 
-  init = () => {
-    this.#offers = [...this.#pointModel.offers];
-    this.#destinations = [...this.#pointModel.destinations];
+  get offers(){
+    const offers = this.#pointModel.offers;
+    return offers;
+  }
 
+  get destinations(){
+    const destinations = this.#pointModel.destinations;
+    return destinations;
+  }
+
+  init = () => {
     this.#renderList();
   };
 
   createTask = (callback) => {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this.#pointNewPresenter.init(callback, this.#offers, this.#destinations);
+    this.#pointNewPresenter.init(callback, this.offers, this.destinations);
   };
 
   #renderList = () => {
     const points = this.points;
     const pointsCount = points.length;
-
+    render(this.#listComponent, this.#listContainer);
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
     if(pointsCount === 0){
       this.#renderListEmty();
       return;
     }
 
     this.#renderListSort();
-    render(this.#listComponent, this.#listContainer);
+
     this.#renderPoints();
   };
 
   #renderListSort = () =>{
     this.#sortComponent = new ListSort(this.#currentSortType);
-    render(this.#sortComponent , this.#listContainer);
+    render(this.#sortComponent , this.#listContainer,RenderPosition.AFTERBEGIN);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   };
 
@@ -86,8 +97,12 @@ export default class ListPresenter {
     render(this.#listEmtyConponent, this.#listContainer);
   };
 
+  #renderLoading = () => {
+    render(this.#loadingComponent, this.#listContainer, RenderPosition.AFTERBEGIN);
+  };
+
   #renderPoints = () => {
-    this.points.forEach((point)=>this.#renderPoint(this.#offers, this.#destinations, point));
+    this.points.forEach((point)=>this.#renderPoint(this.offers, this.destinations, point));
   };
 
   #renderPoint = ( offers, destinations, point) => {
@@ -102,6 +117,7 @@ export default class ListPresenter {
     this.#pointPresenter.clear();
 
     remove(this.#sortComponent);
+    remove(this.#loadingComponent);
 
     if (this.#listEmtyConponent) {
       remove(this.#listEmtyConponent);
@@ -129,7 +145,7 @@ export default class ListPresenter {
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#pointPresenter.get(data.id).init( this.#offers,this.#destinations, data);
+        this.#pointPresenter.get(data.id).init( this.offers,this.destinations, data);
         break;
       case UpdateType.MINOR:
         this.#clearList();
@@ -137,6 +153,11 @@ export default class ListPresenter {
         break;
       case UpdateType.MAJOR:
         this.#clearList({resetSortType:true});
+        this.#renderList();
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
         this.#renderList();
         break;
     }

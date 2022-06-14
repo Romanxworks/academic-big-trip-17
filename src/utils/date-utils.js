@@ -5,12 +5,8 @@ const humanizePointDate = (date) => dayjs(date).format('H:mm');
 const pointDateAddEdit = (date) => dayjs(date).format('DD/MM/YY H:mm');
 
 const getTimeDifference = (dateFrom, dateTo)=>{
-  let start = dayjs(dateFrom);
-  let end = dayjs(dateTo);
-
-  if(start.isAfter(end,'minute')){
-    start = dayjs(dateTo); end = dayjs(dateFrom);
-  }
+  const start = dayjs(dateFrom);
+  const end = dayjs(dateTo);
 
   const differenceToMinute  = Number(end.diff(start,'m',true).toFixed());
   const differenceToHour = Number(end.diff(start,'h',true).toFixed());
