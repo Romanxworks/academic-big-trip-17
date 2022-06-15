@@ -1,7 +1,7 @@
 import AddEditPoint from '../view/add-edit-point-view.js';
 import {render, remove, RenderPosition} from '../framework/render.js';
 import {UserAction, UpdateType} from '../const.js';
-import {nanoid} from 'nanoid';
+
 
 export default class PointNewPresenter {
   #pointContainer = null;
@@ -57,14 +57,33 @@ export default class PointNewPresenter {
     }
   };
 
+  setSaving = () => {
+    this.#addEditPointComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  };
+
+  setAborting = () => {
+    const resetFormState = () => {
+      this.#addEditPointComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#addEditPointComponent.shake(resetFormState);
+  };
+
 
   #handleFormSubmit = (point) => {
     this.#pointChange(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      {...point, id: nanoid()},
+      point
     );
-    this.destroy();
+
   };
 
 
