@@ -149,9 +149,9 @@ export default class ListPresenter {
       case UserAction.ADD_POINT:
         this.#pointNewPresenter.setSaving();
         try {
-          await this.#pointModel.updatePoint(updateType, update);
+          await this.#pointModel.addPoint(updateType, update);
         } catch(err) {
-          this.#pointNewPresenter.get(update.id).setAborting();
+          this.#pointNewPresenter.setAborting();
         }
         break;
       case UserAction.DELETE_POINT:

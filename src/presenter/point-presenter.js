@@ -1,5 +1,5 @@
 import ItemList from '../view/item-list-view.js';
-import AddEditPoint from '../view/add-edit-point-view.js';
+import EditPoint from '../view/edit-point-view.js';
 import {render, replace, remove} from '../framework/render.js';
 import {UserAction, UpdateType} from '../const.js';
 
@@ -11,7 +11,7 @@ const Mode = {
 export default class PointPresenter {
   #pointContainer = null;
   #pointComponent = null;
-  #addEditPointComponent = null;
+  #EditPointComponent = null;
   #point = null;
   #offers = null;
   #destinations = null;
@@ -31,18 +31,18 @@ export default class PointPresenter {
     this.#destinations = destinations;
 
     const prePointComponent = this.#pointComponent;
-    const preAddEditPointComponent = this.#addEditPointComponent;
+    const preEditPointComponent = this.#EditPointComponent;
 
     this.#pointComponent = new ItemList(this.#point, this.#offers);
-    this.#addEditPointComponent = new AddEditPoint( this.#offers, this.#destinations, this.#point);
+    this.#EditPointComponent = new EditPoint( this.#offers, this.#destinations, this.#point);
 
     this.#pointComponent.setEditClickHandler(this.#handleToEditClick);
     this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
-    this.#addEditPointComponent.setEditClickHandler(this.#handleToPointClick);
-    this.#addEditPointComponent.setFormSubmitHandler(this.#handleFormSubmit);
-    this.#addEditPointComponent.setDeleteClickHandler(this.#handleDeleteClick);
+    this.#EditPointComponent.setEditClickHandler(this.#handleToPointClick);
+    this.#EditPointComponent.setFormSubmitHandler(this.#handleFormSubmit);
+    this.#EditPointComponent.setDeleteClickHandler(this.#handleDeleteClick);
 
-    if (prePointComponent === null || preAddEditPointComponent === null) {
+    if (prePointComponent === null || preEditPointComponent === null) {
       render(this.#pointComponent, this.#pointContainer);
       return;
     }
@@ -52,22 +52,22 @@ export default class PointPresenter {
     }
 
     if (this.#mode === Mode.EDITING) {
-      replace(this.#pointComponent, preAddEditPointComponent);
+      replace(this.#pointComponent, preEditPointComponent);
       this.#mode = Mode.DEFAULT;
     }
 
     remove(prePointComponent);
-    remove(preAddEditPointComponent);
+    remove(preEditPointComponent);
   };
 
   destroy = () => {
     remove(this.#pointComponent);
-    remove(this.#addEditPointComponent);
+    remove(this.#EditPointComponent);
   };
 
   setSaving = () => {
     if (this.#mode === Mode.EDITING) {
-      this.#addEditPointComponent.updateElement({
+      this.#EditPointComponent.updateElement({
         isDisabled: true,
         isSaving: true,
       });
@@ -76,7 +76,7 @@ export default class PointPresenter {
 
   setDeleting = () => {
     if (this.#mode === Mode.EDITING) {
-      this.#addEditPointComponent.updateElement({
+      this.#EditPointComponent.updateElement({
         isDisabled: true,
         isDeleting: true,
       });
@@ -90,30 +90,30 @@ export default class PointPresenter {
     }
 
     const resetFormState = () => {
-      this.#addEditPointComponent.updateElement({
+      this.#EditPointComponent.updateElement({
         isDisabled: false,
         isSaving: false,
         isDeleting: false,
       });
     };
 
-    this.#addEditPointComponent.shake(resetFormState);
+    this.#EditPointComponent.shake(resetFormState);
   };
 
   #replacePointToForm = () => {
-    replace(this.#addEditPointComponent, this.#pointComponent);
+    replace(this.#EditPointComponent, this.#pointComponent);
     this.#modeChange();
     this.#mode = Mode.EDITING;
   };
 
   #replaceFormToPoint = () => {
-    replace(this.#pointComponent, this.#addEditPointComponent);
+    replace(this.#pointComponent, this.#EditPointComponent);
     this.#mode = Mode.DEFAULT;
   };
 
   resetView = () => {
     if (this.#mode !== Mode.DEFAULT) {
-      this.#addEditPointComponent.reset(this.#point);
+      this.#EditPointComponent.reset(this.#point);
       this.#replaceFormToPoint();
     }
   };
@@ -121,7 +121,7 @@ export default class PointPresenter {
   #onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
-      this.#addEditPointComponent.reset(this.#point);
+      this.#EditPointComponent.reset(this.#point);
       this.#replaceFormToPoint();
       document.removeEventListener('keydown', this.#onEscKeyDown);
     }

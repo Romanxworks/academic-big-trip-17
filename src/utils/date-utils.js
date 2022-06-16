@@ -33,4 +33,12 @@ const isFutureDate = (dateFrom, dateTo) => dayjs().isBefore(dayjs(dateFrom))||da
 
 const isPastDate = (date) => dayjs().isAfter(dayjs(date));
 
-export {humanizePointDate, getTimeDifference, generateDate, pointDateAddEdit, isFutureDate, isPastDate};
+const getDestinationByName = (destinations, name) => {
+  if(name){
+    return destinations.find((destination) => destination.name === name);
+  }
+  return null;
+};
+
+
+export {humanizePointDate, getTimeDifference, generateDate, pointDateAddEdit, isFutureDate, isPastDate, getDestinationByName};
