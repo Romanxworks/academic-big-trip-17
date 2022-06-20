@@ -156,7 +156,7 @@ const createAddNewPointTemplate = ( offers = [], destinations = [], point) => {
   );};
 
 
-export default class AddNewPoint extends AbstractStatefulView{
+export default class AddNewPointView extends AbstractStatefulView{
   #destinations = null;
   #offer = null;
   #datepicker = null;
@@ -165,7 +165,7 @@ export default class AddNewPoint extends AbstractStatefulView{
     super();
     this.#offer = offers;
     this.#destinations = destinations;
-    this._state = AddNewPoint.parsePointToState(BLANK_POINT);
+    this._state = AddNewPointView.parsePointToState(BLANK_POINT);
     this.#setInnerHandlers();
     this.#setDatepickerFrom();
     this.#setDatepickerTo();
@@ -177,7 +177,7 @@ export default class AddNewPoint extends AbstractStatefulView{
 
   reset = (point) => {
     this.updateElement(
-      AddNewPoint.parsePointToState(point),
+      AddNewPointView.parsePointToState(point),
     );
   };
 
@@ -232,7 +232,7 @@ export default class AddNewPoint extends AbstractStatefulView{
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit(AddNewPoint.parseStateToPoint(this._state));
+    this._callback.formSubmit(AddNewPointView.parseStateToPoint(this._state));
   };
 
   #typeToggleHandler = (evt) => {
@@ -298,7 +298,7 @@ export default class AddNewPoint extends AbstractStatefulView{
 
   #formDeleteClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.deleteClick(AddNewPoint.parseStateToPoint(this._state));
+    this._callback.deleteClick(AddNewPointView.parseStateToPoint(this._state));
   };
 
   static parsePointToState = (point) => ({...point,

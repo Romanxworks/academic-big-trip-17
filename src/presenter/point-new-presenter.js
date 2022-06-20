@@ -1,7 +1,7 @@
-import AddNewPoint from '../view/add-new-point-view.js';
+import AddNewPointView from '../view/add-new-point-view.js';
 import {render, remove, RenderPosition} from '../framework/render.js';
 import {UserAction, UpdateType} from '../const.js';
-
+import {isEscapeKey} from '../utils/date-utils.js';
 
 export default class PointNewPresenter {
   #pointContainer = null;
@@ -24,7 +24,7 @@ export default class PointNewPresenter {
       return;
     }
 
-    this.#addNewPointComponent = new AddNewPoint(this.#offers, this.#destinations);
+    this.#addNewPointComponent = new AddNewPointView(this.#offers, this.#destinations);
     this.#addNewPointComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#addNewPointComponent.setDeleteClickHandler(this.#handleDeleteClick);
 
@@ -49,7 +49,7 @@ export default class PointNewPresenter {
   };
 
   #onEscKeyDown = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (isEscapeKey(evt)) {
       evt.preventDefault();
       this.destroy();
       document.removeEventListener('keydown', this.#onEscKeyDown);

@@ -66,7 +66,7 @@ const createNewItemListTemplate = (point, allOffers=[]) => {
 };
 
 
-export default class ItemList extends AbstractView{
+export default class ItemListView extends AbstractView{
   #point = null;
   #offer = null;
 

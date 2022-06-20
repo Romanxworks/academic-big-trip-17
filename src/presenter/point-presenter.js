@@ -1,8 +1,8 @@
-import ItemList from '../view/item-list-view.js';
-import EditPoint from '../view/edit-point-view.js';
+import ItemListView from '../view/item-list-view.js';
+import EditPointView from '../view/edit-point-view.js';
 import {render, replace, remove} from '../framework/render.js';
 import {UserAction, UpdateType} from '../const.js';
-
+import {isEscapeKey} from '../utils/date-utils.js';
 const Mode = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING',
@@ -33,8 +33,8 @@ export default class PointPresenter {
     const prePointComponent = this.#pointComponent;
     const preEditPointComponent = this.#EditPointComponent;
 
-    this.#pointComponent = new ItemList(this.#point, this.#offers);
-    this.#EditPointComponent = new EditPoint( this.#offers, this.#destinations, this.#point);
+    this.#pointComponent = new ItemListView(this.#point, this.#offers);
+    this.#EditPointComponent = new EditPointView( this.#offers, this.#destinations, this.#point);
 
     this.#pointComponent.setEditClickHandler(this.#handleToEditClick);
     this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
@@ -119,7 +119,7 @@ export default class PointPresenter {
   };
 
   #onEscKeyDown = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (isEscapeKey(evt)) {
       evt.preventDefault();
       this.#EditPointComponent.reset(this.#point);
       this.#replaceFormToPoint();

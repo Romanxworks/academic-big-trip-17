@@ -17,7 +17,7 @@ const createNewListFilterTemplate = (filters, currentFilter)=>{
   );
 };
 
-export default class ListFilter extends AbstractView {
+export default class ListFilterView extends AbstractView {
   #filters = null;
   #currentFilter = null;
 

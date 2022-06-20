@@ -125,7 +125,7 @@ const createAddEditPointTemplate = ( offers = [], destinations = [], point) => {
   );};
 
 
-export default class EditPoint extends AbstractStatefulView{
+export default class EditPointView extends AbstractStatefulView{
   #destinations = null;
   #offer = null;
   #datepicker = null;
@@ -134,7 +134,7 @@ export default class EditPoint extends AbstractStatefulView{
     super();
     this.#offer = offers;
     this.#destinations = destinations;
-    this._state = EditPoint.parsePointToState(point);
+    this._state = EditPointView.parsePointToState(point);
     this.#setInnerHandlers();
     this.#setDatepickerFrom();
     this.#setDatepickerTo();
@@ -146,7 +146,7 @@ export default class EditPoint extends AbstractStatefulView{
 
   reset = (point) => {
     this.updateElement(
-      EditPoint.parsePointToState(point),
+      EditPointView.parsePointToState(point),
     );
   };
 
@@ -213,7 +213,7 @@ export default class EditPoint extends AbstractStatefulView{
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit(EditPoint.parseStateToPoint(this._state));
+    this._callback.formSubmit(EditPointView.parseStateToPoint(this._state));
   };
 
   #typeToggleHandler = (evt) => {
@@ -283,7 +283,7 @@ export default class EditPoint extends AbstractStatefulView{
 
   #formDeleteClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.deleteClick(EditPoint.parseStateToPoint(this._state));
+    this._callback.deleteClick(EditPointView.parseStateToPoint(this._state));
   };
 
   static parsePointToState = (point) => ({...point,
