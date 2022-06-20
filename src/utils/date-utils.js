@@ -1,10 +1,9 @@
 import dayjs from 'dayjs';
-import {getRandomInteger} from './random-data-utils.js';
 const humanizePointDate = (date) => dayjs(date).format('H:mm');
 
 const pointDateAddEdit = (date) => dayjs(date).format('DD/MM/YY H:mm');
 
-const getTimeDifference = (dateFrom, dateTo)=>{
+const getTimeDifference = (dateFrom, dateTo) => {
   const start = dayjs(dateFrom);
   const end = dayjs(dateTo);
 
@@ -21,14 +20,6 @@ const getTimeDifference = (dateFrom, dateTo)=>{
   return result;
 };
 
-const generateDate = (gapType) => {
-
-  const maxGap = getRandomInteger(3,10);
-  const gap = getRandomInteger(-maxGap, maxGap);
-
-  return dayjs().add(gap, gapType).toISOString();
-};
-
 const isFutureDate = (dateFrom, dateTo) => dayjs().isBefore(dayjs(dateFrom))||dayjs().isSame(dayjs(dateFrom))||dayjs().isBefore(dayjs(dateTo));
 
 const isPastDate = (date) => dayjs().isAfter(dayjs(date));
@@ -41,4 +32,4 @@ const getDestinationByName = (destinations, name) => {
 };
 
 
-export {humanizePointDate, getTimeDifference, generateDate, pointDateAddEdit, isFutureDate, isPastDate, getDestinationByName};
+export {humanizePointDate, getTimeDifference, pointDateAddEdit, isFutureDate, isPastDate, getDestinationByName};

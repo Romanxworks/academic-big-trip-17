@@ -68,7 +68,6 @@ export default class PointNewPresenter {
       this.#addNewPointComponent.updateElement({
         isDisabled: false,
         isSaving: false,
-        isDeleting: false,
       });
     };
 
@@ -84,7 +83,6 @@ export default class PointNewPresenter {
     );
 
   };
-
 
   #handleDeleteClick = () => {
     this.destroy();

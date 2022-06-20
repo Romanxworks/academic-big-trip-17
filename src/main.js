@@ -33,7 +33,7 @@ const handleNewPointFormClose = () => {
 };
 
 const handleNewPointButtonClick = () => {
-  listPresenter.createTask(handleNewPointFormClose);
+  listPresenter.createPoint(handleNewPointFormClose);
   newPointButtonComponent.element.disabled = true;
 };
 
