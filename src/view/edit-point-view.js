@@ -87,7 +87,7 @@ const createAddEditPointTemplate = ( offers = [], destinations = [], point) => {
                     ${stateType}
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${stateDestination !== null ? he.encode(stateDestination.name): ''}" list="destination-list-1" ${isDisabled? 'disabled' : ''}>
-                    <datalist id="destination-list-1">
+                    <datalist id="destination-list-1" required>
                       ${destinationList}
                     </datalist>
                   </div>
@@ -225,7 +225,13 @@ export default class EditPoint extends AbstractStatefulView{
 
   #destinationToggleHandler = (evt) => {
     evt.preventDefault();
-    this._state.stateDestination = getDestinationByName(this.#destinations, evt.target.value);
+    const newDestination = getDestinationByName(this.#destinations, evt.target.value);
+    if(!newDestination){
+      evt.target.value = '';
+      evt.target.placeholder = this._state.stateDestination.name;
+      return this._setState({stateDestination:this._state.stateDestination});
+    }
+    this._state.stateDestination = newDestination;
     this.updateElement({stateDestination:this._state.stateDestination});
   };
 

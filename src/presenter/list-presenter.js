@@ -69,7 +69,7 @@ export default class ListPresenter {
     this.#renderList();
   };
 
-  createTask = (callback) => {
+  createPoint = (callback) => {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#pointNewPresenter.init(callback, this.offers, this.destinations);
@@ -112,7 +112,7 @@ export default class ListPresenter {
     this.points.forEach((point)=>this.#renderPoint(this.offers, this.destinations, point));
   };
 
-  #renderPoint = ( offers, destinations, point) => {
+  #renderPoint = (offers, destinations, point) => {
     const pointPresenter = new PointPresenter(this.#listComponent.element, this.#handleViewAction,  this.#handleModeChange);
     pointPresenter.init( offers, destinations, point);
     this.#pointPresenter.set(point.id, pointPresenter);

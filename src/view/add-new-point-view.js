@@ -2,6 +2,8 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {pointDateAddEdit} from '../utils/date-utils.js';
 import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
+import he from 'he';
+
 
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -89,7 +91,6 @@ const createAddNewPointTemplate = ( offers = [], destinations = [], point) => {
   const offerItems = createOfferItems(stateOffers.offers, isDisabled);
   const destinationSectoin = destinationContainerTemplate(stateDestination);
 
-
   return (`<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -112,7 +113,7 @@ const createAddNewPointTemplate = ( offers = [], destinations = [], point) => {
         <label class="event__label  event__type-output" for="event-destination-1">
         ${stateType}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${stateDestination !== null? stateDestination.name: ''}" list="destination-list-1" ${isDisabled? 'disabled' : ''}>
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${stateDestination !== null? he.encode(stateDestination.name): ''}" list="destination-list-1" ${isDisabled? 'disabled' : ''} required>
         <datalist id="destination-list-1">
         ${destinationList}
         </datalist>
@@ -241,9 +242,12 @@ export default class AddNewPoint extends AbstractStatefulView{
     });
   };
 
-  #destinationNameToggleHandler = (evt) => {
+  #destinationToggleHandler = (evt) => {
     evt.preventDefault();
     this._state.stateDestination = getDestinationByName(this.#destinations, evt.target.value);
+    if(!this._state.stateDestination){
+      this._state.stateDestination = BLANK_POINT.destination;
+    }
     this.updateElement({stateDestination:this._state.stateDestination});
   };
 
@@ -256,7 +260,7 @@ export default class AddNewPoint extends AbstractStatefulView{
 
   #priceToggleHandler = (evt) => {
     evt.preventDefault();
-    this.updateElement({statePrice:Number(evt.target.value)});
+    this._setState({statePrice:Number(evt.target.value)});
   };
 
   #setDateToHandler = ([userDateTo]) => {
@@ -281,7 +285,7 @@ export default class AddNewPoint extends AbstractStatefulView{
     this.element.querySelector('.event__type-group')
       .addEventListener('change', this.#typeToggleHandler);
     this.element.querySelector('.event__input--destination')
-      .addEventListener('change', this.#destinationNameToggleHandler);
+      .addEventListener('change', this.#destinationToggleHandler);
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceToggleHandler);
     const offers = this.element.querySelectorAll('.event__offer-checkbox');
     offers.forEach((offer)=>offer.addEventListener('change', this.#offersToggleHandler));
@@ -306,7 +310,6 @@ export default class AddNewPoint extends AbstractStatefulView{
     stateOffers: point.offers,
     isDisabled: false,
     isSaving: false,
-    isDeleting: false,
   });
 
   static parseStateToPoint = (state) => {
@@ -327,7 +330,6 @@ export default class AddNewPoint extends AbstractStatefulView{
     delete point.stateOffers;
     delete point.isDisabled;
     delete point.isSaving;
-    delete point.isDeleting;
 
     return point;
   };
