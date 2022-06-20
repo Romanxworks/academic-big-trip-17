@@ -1,6 +1,6 @@
-import List from '../view/list-view.js';
-import ListEmpty from '../view/list-empty-view.js';
-import ListSort from '../view/list-sort-view.js';
+import ListView from '../view/list-view.js';
+import ListEmptyView from '../view/list-empty-view.js';
+import ListSortView from '../view/list-sort-view.js';
 import {remove,RenderPosition, render} from '../framework/render.js';
 import {filter} from '../utils/filter.js';
 import PointNewPresenter from './point-new-presenter.js';
@@ -16,7 +16,7 @@ const TimeLimit = {
 };
 
 export default class ListPresenter {
-  #listComponent = new List();
+  #listComponent = new ListView();
   #listContainer = null;
   #pointModel = null;
   #listEmtyConponent = null;
@@ -56,13 +56,11 @@ export default class ListPresenter {
   }
 
   get offers(){
-    const offers = this.#pointModel.offers;
-    return offers;
+    return this.#pointModel.offers;
   }
 
   get destinations(){
-    const destinations = this.#pointModel.destinations;
-    return destinations;
+    return this.#pointModel.destinations;
   }
 
   init = () => {
@@ -94,13 +92,13 @@ export default class ListPresenter {
   };
 
   #renderListSort = () =>{
-    this.#sortComponent = new ListSort(this.#currentSortType);
+    this.#sortComponent = new ListSortView(this.#currentSortType);
     render(this.#sortComponent , this.#listContainer,RenderPosition.AFTERBEGIN);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   };
 
   #renderListEmty = () =>{
-    this.#listEmtyConponent =  new ListEmpty(this.#filterType);
+    this.#listEmtyConponent =  new ListEmptyView(this.#filterType);
     render(this.#listEmtyConponent, this.#listContainer);
   };
 

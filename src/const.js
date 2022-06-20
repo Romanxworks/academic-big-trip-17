@@ -22,4 +22,10 @@ const UpdateType = {
   INIT: 'INIT',
 };
 
-export{FilterType, SortType, UserAction, UpdateType};
+const PointDifferenceTime = {
+  MINUTE: 60,
+  HOUR: 9,
+  DAY: 24
+};
+
+export{FilterType, SortType, UserAction, UpdateType, PointDifferenceTime};

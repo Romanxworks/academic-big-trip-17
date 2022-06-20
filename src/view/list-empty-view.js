@@ -14,7 +14,7 @@ const createListEmptyTemplate = (filterType) =>{
   );
 };
 
-export default class ListEmpty extends AbstractView{
+export default class ListEmptyView extends AbstractView{
   #filterType = null;
 
   constructor(filterType) {
