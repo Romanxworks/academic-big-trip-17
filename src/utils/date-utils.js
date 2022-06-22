@@ -35,4 +35,15 @@ const getDestinationByName = (destinations, name) => {
 
 const isEscapeKey = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
-export {humanizePointDate, getTimeDifference, pointDateAddEdit, isFutureDate, isPastDate, getDestinationByName, isEscapeKey};
+const getDateDayMonth = (date) => dayjs(date).format('D MMMM');
+
+const getSumElements = (elements) => {
+  const sum = 0;
+  const sumElements = elements.reduce(
+    (priceA, priceB) => priceA + priceB,
+    sum
+  );
+  return sumElements;
+};
+
+export {humanizePointDate, getTimeDifference, pointDateAddEdit, isFutureDate, isPastDate, getDestinationByName, isEscapeKey, getDateDayMonth, getSumElements};

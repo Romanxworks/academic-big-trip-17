@@ -1,6 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import dayjs from 'dayjs';
-import {humanizePointDate, getTimeDifference} from '../utils/date-utils.js';
+import {humanizePointDate, getTimeDifference, getDateDayMonth} from '../utils/date-utils.js';
 
 
 const createNewItemListTemplate = (point, allOffers=[]) => {
@@ -23,7 +22,7 @@ const createNewItemListTemplate = (point, allOffers=[]) => {
     );}};
 
   const favorite =  isFavorite ? 'event__favorite-btn--active' : '';
-  const dateEvent = dayjs(dateFrom).format('D MMMM');
+  const dateEvent = getDateDayMonth(dateFrom);
   const dateEventFrom = humanizePointDate(dateFrom);
   const dateEventTo = humanizePointDate(dateTo);
   const timeDifference = getTimeDifference(dateFrom,dateTo);
