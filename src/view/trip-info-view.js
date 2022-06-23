@@ -1,6 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {getDateDayMonth, getSumElements} from '../utils/date-utils.js';
 
+const MIN_LENGTH = 2;
+
 const getPointPrice = (points) => {
   const totalPrice = [];
   points.map((point) => totalPrice.push(point.basePrice));
@@ -39,7 +41,7 @@ const createNewTripInfoTemplate = (points , offers)=>{
   return(
     `<section class="trip-main__trip-info  trip-info">
     <div class="trip-info__main">
-      <h1 class="trip-info__title">${points[0].destination.name} &mdash; ... &mdash; ${points[lastIndex].destination.name}</h1>
+      <h1 class="trip-info__title">${points[0].destination.name} &mdash; ${points.length === MIN_LENGTH ? points[1].destination.name:'...' } &mdash; ${points[lastIndex].destination.name}</h1>
 
       <p class="trip-info__dates">${dateStart}&nbsp;&mdash;&nbsp;${dateEnd}</p>
     </div>
