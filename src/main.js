@@ -1,5 +1,4 @@
 import ListPresenter from './presenter/list-presenter.js';
-import TripInfo from './view/trip-info-view.js';
 import {render} from './framework/render.js';
 import PointModel from './model/point-model.js';
 import FilterModel from './model/filter-model.js';
@@ -8,6 +7,7 @@ import NewPointButtonView from './view/new-point-button-view.js';
 import PointApiService from './api-sevices/point-api-service.js';
 import DestinationApiService from './api-sevices/destinations-api-service.js';
 import OffersApiService from './api-sevices/offers-api-service.js';
+import TripInfoPresenter from './presenter/trip-info-presenter.js';
 
 const AUTHORIZATION = 'Basic zhHM9Rz3X4Knf1';
 const END_POINT = 'https://17.ecmascript.pages.academy/big-trip';
@@ -25,9 +25,8 @@ const pointModel = new PointModel(pointsApiService, destinationApiService, offer
 const filterModel = new FilterModel();
 const listPresenter = new ListPresenter(tripEventsElement, pointModel, filterModel);
 const filterPresenter = new FilterPresenter(filtersElement, filterModel, pointModel);
+const tripInfoPresenter = new TripInfoPresenter(tripMain,pointModel);
 
-
-render(new TripInfo(),tripMain, 'afterbegin');
 const handleNewPointFormClose = () => {
   newPointButtonComponent.element.disabled = false;
 };
@@ -40,6 +39,8 @@ const handleNewPointButtonClick = () => {
 listPresenter.init();
 filterPresenter.init();
 pointModel.init().finally(() => {
+  tripInfoPresenter.init();
   render(newPointButtonComponent, tripMain);
   newPointButtonComponent.setClickHandler(handleNewPointButtonClick);
 });
+
