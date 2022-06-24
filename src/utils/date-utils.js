@@ -38,10 +38,8 @@ const isEscapeKey = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 const getDateDayMonth = (date) => dayjs(date).format('D MMMM');
 
 const getSumElements = (elements) => {
-  const sum = 0;
   const sumElements = elements.reduce(
-    (priceA, priceB) => priceA + priceB,
-    sum
+    (priceA, priceB) => priceA + priceB
   );
   return sumElements;
 };
